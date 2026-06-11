@@ -2,76 +2,77 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Edit Invoice</title>
+    <title>Invoice Details</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
 <nav class="navbar">
     <span class="brand">PCCRMS</span>
-    <div style="display:flex; align-items:center; gap:20px;">
+    <div>
         <a th:href="@{/}">Home</a>
         <a th:href="@{/patients}">Patients</a>
         <a th:href="@{/appointments}">Appointments</a>
         <a th:href="@{/ehr}">EHR</a>
         <a th:href="@{/prescriptions}">Prescriptions</a>
         <a th:href="@{/billing}">Billing</a>
-
-        <div class="admin-badge">
-            <i class="fa-solid fa-user-shield"></i>
-            <span>Admin</span>
-        </div>
     </div>
 </nav>
 
 <div class="container">
-    <div class="card" style="max-width:550px; margin: 30px auto;">
-        <h2>Edit Invoice</h2>
-        <form th:action="@{/billing/edit/{id}(id=${invoice.invoiceId})}"
-              method="post">
+    <div class="card" style="max-width:600px; margin: 30px auto;">
+        <h2>Invoice Details</h2>
 
-            <div class="form-group">
-                <label>Patient</label>
-                <select name="patientId">
-                    <option th:each="p : ${patients}"
-                            th:value="${p.patientId}"
-                            th:text="${p.fullName + ' (' + p.mrn + ')'}"
-                            th:selected="${p.patientId == invoice.patient.patientId}">
-                    </option>
-                </select>
-            </div>
+        <table style="width:100%;">
+            <tr>
+                <td style="font-weight:bold; padding:10px; width:40%;">Invoice ID</td>
+                <td th:text="${invoice.invoiceId}"></td>
+            </tr>
+            <tr>
+                <td style="font-weight:bold; padding:10px;">Patient</td>
+                <td th:text="${invoice.patient.fullName}"></td>
+            </tr>
+            <tr>
+                <td style="font-weight:bold; padding:10px;">MRN</td>
+                <td th:text="${invoice.patient.mrn}"></td>
+            </tr>
+            <tr>
+                <td style="font-weight:bold; padding:10px;">Total Amount</td>
+                <td th:text="'₹ ' + ${invoice.totalAmount}"></td>
+            </tr>
+            <tr>
+                <td style="font-weight:bold; padding:10px;">Insurance Coverage</td>
+                <td th:text="'₹ ' + ${invoice.insuranceCoverage}"></td>
+            </tr>
+            <tr>
+                <td style="font-weight:bold; padding:10px;">Patient Payable</td>
+                <td th:text="'₹ ' + ${invoice.patientPayable}"></td>
+            </tr>
+            <tr>
+                <td style="font-weight:bold; padding:10px;">Claim Status</td>
+                <td>
+<span th:text="${invoice.claimStatus}"
 
-            <div class="form-group">
-                <label>Total Amount (₹)</label>
-                <input type="number" name="totalAmount"
-                       th:value="${invoice.totalAmount}"
-                       step="0.01" min="0"/>
-            </div>
+      th:classappend="${invoice.claimStatus.name() == 'APPROVED'} ? 'badge-success' :
 
-            <div class="form-group">
-                <label>Insurance Coverage (₹)</label>
-                <input type="number" name="insuranceCoverage"
-                       th:value="${invoice.insuranceCoverage}"
-                       step="0.01" min="0"/>
-            </div>
+                                         (${invoice.claimStatus.name() == 'REJECTED'} ? 'badge-danger' :
 
-            <div class="form-group">
-                <label>Claim Status</label>
-                <select name="claimStatus">
-                    <option th:each="status : ${statuses}"
-                            th:value="${status}"
-                            th:text="${status}"
-                            th:selected="${status == invoice.claimStatus}">
-                    </option>
-                </select>
-            </div>
+                                         'badge-warning')"
 
-            <button type="submit" class="btn btn-primary">Update</button>
-            <a th:href="@{/billing}" class="btn btn-danger"
-               style="margin-left:10px;">Cancel</a>
+      class="badge">
+</span>
+                </td>
+            </tr>
+        </table>
 
-        </form>
+        <div style="margin-top:20px;">
+            <a th:href="@{/billing/edit/{id}(id=${invoice.invoiceId})}"
+
+               class="btn btn-warning">Edit</a>
+            <a th:href="@{/billing}" class="btn btn-primary"
+
+               style="margin-left:10px;">Back</a>
+        </div>
     </div>
 </div>
 
