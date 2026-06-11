@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Billing</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <span class="brand">PCCRMS</span>
+    <div style="display:flex; align-items:center; gap:20px;">
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/patients}">Patients</a>
+        <a th:href="@{/appointments}">Appointments</a>
+        <a th:href="@{/ehr}">EHR</a>
+        <a th:href="@{/prescriptions}">Prescriptions</a>
+        <a th:href="@{/billing}">Billing</a>
+
+        <div class="admin-badge">
+            <i class="fa-solid fa-user-shield"></i>
+            <span>Admin</span>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="card">
+        <h2>Billing & Invoices</h2>
+
+        <div style="margin-bottom: 16px;">
+            <a th:href="@{/billing/create}" class="btn btn-success">
+                + Generate Invoice
+            </a>
+        </div>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Invoice ID</th>
+                <th>Patient</th>
+                <th>Total Amount</th>
+                <th>Insurance</th>
+                <th>Patient Payable</th>
+                <th>Claim Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="inv : ${invoices}">
+                <td th:text="${inv.invoiceId}"></td>
+                <td th:text="${inv.patient.fullName}"></td>
+                <td th:text="'₹ ' + ${inv.totalAmount}"></td>
+                <td th:text="'₹ ' + ${inv.insuranceCoverage}"></td>
+                <td th:text="'₹ ' + ${inv.patientPayable}"></td>
+                <td>
+                        <span th:text="${inv.claimStatus}"
+                              th:classappend="${inv.claimStatus.name() == 'APPROVED'} ? 'badge-success' :
+                                             (${inv.claimStatus.name() == 'REJECTED'} ? 'badge-danger' :
+                                             'badge-warning')"
+                              class="badge">
+                        </span>
+                </td>
+                <td>
+                    <a th:href="@{/billing/view/{id}(id=${inv.invoiceId})}"
+                       class="btn btn-primary">View</a>
+                    <a th:if="${inv.claimStatus.name() == 'PENDING'}"
+                       th:href="@{/billing/approve/{id}(id=${inv.invoiceId})}"
+                       class="btn btn-success"
+                       onclick="return confirm('Approve this claim?')">Approve</a>
+                    <a th:if="${inv.claimStatus.name() == 'PENDING'}"
+                       th:href="@{/billing/reject/{id}(id=${inv.invoiceId})}"
+                       class="btn btn-danger"
+                       onclick="return confirm('Reject this claim?')">Reject</a>
+                    <a th:href="@{/billing/edit/{id}(id=${inv.invoiceId})}"
+                       class="btn btn-warning">Edit</a>
+                    <a th:href="@{/billing/delete/{id}(id=${inv.invoiceId})}"
+                       class="btn btn-danger"
+                       onclick="return confirm('Delete this invoice?')">Delete</a>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(invoices)}">
+                <td colspan="7" style="text-align:center; color:#999;">
+                    No invoices found.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
