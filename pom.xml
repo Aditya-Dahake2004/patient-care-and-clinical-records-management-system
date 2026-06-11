@@ -103,7 +103,7 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-    </dependencies>
+
 
 	<build>
 		<plugins>
