@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>View Record</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <span class="brand">PCCRMS</span>
+    <div style="display:flex; align-items:center; gap:20px;">
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/patients}">Patients</a>
+        <a th:href="@{/appointments}">Appointments</a>
+        <a th:href="@{/ehr}">EHR</a>
+        <a th:href="@{/prescriptions}">Prescriptions</a>
+        <a th:href="@{/billing}">Billing</a>
+
+        <div class="admin-badge">
+            <i class="fa-solid fa-user-shield"></i>
+            <span>Admin</span>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="card" style="max-width:600px; margin: 30px auto;">
+        <h2>Clinical Record Details</h2>
+
+        <table style="width:100%;">
+            <tr>
+                <td style="font-weight:bold; padding:10px; width:40%;">Patient</td>
+                <td th:text="${record.patient.fullName}"></td>
+            </tr>
+            <tr>
+                <td style="font-weight:bold; padding:10px;">MRN</td>
+                <td th:text="${record.patient.mrn}"></td>
+            </tr>
+            <tr>
+                <td style="font-weight:bold; padding:10px;">Encounter Date</td>
+                <td th:text="${record.encounterDate}"></td>
+            </tr>
+            <tr>
+                <td style="font-weight:bold; padding:10px;">Diagnosis Code</td>
+                <td th:text="${record.diagnosisCode}"></td>
+            </tr>
+            <tr>
+                <td style="font-weight:bold; padding:10px;">Vitals Summary</td>
+                <td th:text="${record.vitalsSummary}"></td>
+            </tr>
+            <tr>
+                <td style="font-weight:bold; padding:10px;">Clinical Notes</td>
+                <td th:text="${record.clinicalNotes}"></td>
+            </tr>
+        </table>
+
+        <div style="margin-top:20px;">
+            <a th:href="@{/ehr/edit/{id}(id=${record.recordId})}"
+               class="btn btn-warning">Edit</a>
+            <a th:href="@{/ehr}" class="btn btn-primary" style="margin-left:10px;">Back</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
