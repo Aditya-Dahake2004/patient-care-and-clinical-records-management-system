@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Prescription</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <span class="brand">PCCRMS</span>
+    <div style="display:flex; align-items:center; gap:20px;">
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/patients}">Patients</a>
+        <a th:href="@{/appointments}">Appointments</a>
+        <a th:href="@{/ehr}">EHR</a>
+        <a th:href="@{/prescriptions}">Prescriptions</a>
+        <a th:href="@{/billing}">Billing</a>
+
+        <div class="admin-badge">
+            <i class="fa-solid fa-user-shield"></i>
+            <span>Admin</span>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="card" style="max-width:550px; margin: 30px auto;">
+        <h2>Edit Prescription</h2>
+        <form th:action="@{/prescriptions/edit/{id}(id=${prescription.prescriptionId})}"
+              method="post">
+
+            <div class="form-group">
+                <label>Patient</label>
+                <select name="patientId">
+                    <option th:each="p : ${patients}"
+                            th:value="${p.patientId}"
+                            th:text="${p.fullName + ' (' + p.mrn + ')'}"
+                            th:selected="${p.patientId == prescription.patient.patientId}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Medication Name</label>
+                <input type="text" name="medicationName"
+                       th:value="${prescription.medicationName}"/>
+            </div>
+
+            <div class="form-group">
+                <label>Dosage</label>
+                <input type="text" name="dosage"
+                       th:value="${prescription.dosage}"/>
+            </div>
+
+            <div class="form-group">
+                <label>Frequency</label>
+                <input type="text" name="frequency"
+                       th:value="${prescription.frequency}"/>
+            </div>
+
+            <div class="form-group">
+                <label>Status</label>
+                <select name="dispenseStatus">
+                    <option th:each="status : ${statuses}"
+                            th:value="${status}"
+                            th:text="${status}"
+                            th:selected="${status == prescription.dispenseStatus}">
+                    </option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a th:href="@{/prescriptions}" class="btn btn-danger"
+               style="margin-left:10px;">Cancel</a>
+
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
