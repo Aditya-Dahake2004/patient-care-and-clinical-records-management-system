@@ -50,7 +50,6 @@ public class ClinicalRecordService {
         return clinicalRecordRepository.save(existing);
     }
 
-    // Delete record
     public void deleteRecord(Integer id) {
         clinicalRecordRepository.deleteById(id);
     }

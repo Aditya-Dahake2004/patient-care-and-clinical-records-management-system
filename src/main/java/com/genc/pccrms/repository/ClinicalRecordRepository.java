@@ -9,9 +9,7 @@ import java.util.List;
 @Repository
 public interface ClinicalRecordRepository extends JpaRepository<ClinicalRecord, Integer> {
 
-    // Get all records for a specific patient
     List<ClinicalRecord> findByPatient_PatientId(Integer patientId);
 
-    // Get records by diagnosis code
     List<ClinicalRecord> findByDiagnosisCodeContainingIgnoreCase(String diagnosisCode);
 }
