@@ -49,7 +49,6 @@ public class ClinicalRecordService {
         existing.setVitalsSummary(updated.getVitalsSummary());
         return clinicalRecordRepository.save(existing);
     }
-
     public void deleteRecord(Integer id) {
         clinicalRecordRepository.deleteById(id);
     }
