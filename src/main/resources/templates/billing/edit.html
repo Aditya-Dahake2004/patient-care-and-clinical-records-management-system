@@ -29,42 +29,60 @@
     <div class="card" style="max-width:550px; margin: 30px auto;">
         <h2>Edit Invoice</h2>
         <form th:action="@{/billing/edit/{id}(id=${invoice.invoiceId})}"
-              method="post">
+              th:object="${invoice}" method="post">
 
             <div class="form-group">
                 <label>Patient</label>
-                <select name="patientId">
+                <select name="patientId"
+                        th:classappend="${#fields.hasErrors('patient')} ? 'input-error'">
                     <option th:each="p : ${patients}"
                             th:value="${p.patientId}"
                             th:text="${p.fullName + ' (' + p.mrn + ')'}"
                             th:selected="${p.patientId == invoice.patient.patientId}">
                     </option>
                 </select>
+                <span class="error-msg" th:if="${#fields.hasErrors('patient')}"
+                      th:errors="*{patient}"></span>
             </div>
 
             <div class="form-group">
                 <label>Total Amount (₹)</label>
-                <input type="number" name="totalAmount"
-                       th:value="${invoice.totalAmount}"
-                       step="0.01" min="0"/>
+                <input type="number" th:field="*{totalAmount}"
+                       step="0.01" min="0"
+                       th:classappend="${#fields.hasErrors('totalAmount')} ? 'input-error'"/>
+                <span class="error-msg" th:if="${#fields.hasErrors('totalAmount')}"
+                      th:errors="*{totalAmount}"></span>
             </div>
 
             <div class="form-group">
                 <label>Insurance Coverage (₹)</label>
-                <input type="number" name="insuranceCoverage"
-                       th:value="${invoice.insuranceCoverage}"
-                       step="0.01" min="0"/>
+                <input type="number" th:field="*{insuranceCoverage}"
+                       step="0.01" min="0"
+                       th:classappend="${#fields.hasErrors('insuranceCoverage')} ? 'input-error'"/>
+                <span class="error-msg" th:if="${#fields.hasErrors('insuranceCoverage')}"
+                      th:errors="*{insuranceCoverage}"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Patient Payable (₹)</label>
+                <input type="number" th:field="*{patientPayable}"
+                       step="0.01" min="0"
+                       th:classappend="${#fields.hasErrors('patientPayable')} ? 'input-error'"/>
+                <span class="error-msg" th:if="${#fields.hasErrors('patientPayable')}"
+                      th:errors="*{patientPayable}"></span>
             </div>
 
             <div class="form-group">
                 <label>Claim Status</label>
-                <select name="claimStatus">
+                <select th:field="*{claimStatus}"
+                        th:classappend="${#fields.hasErrors('claimStatus')} ? 'input-error'">
                     <option th:each="status : ${statuses}"
                             th:value="${status}"
-                            th:text="${status}"
-                            th:selected="${status == invoice.claimStatus}">
+                            th:text="${status}">
                     </option>
                 </select>
+                <span class="error-msg" th:if="${#fields.hasErrors('claimStatus')}"
+                      th:errors="*{claimStatus}"></span>
             </div>
 
             <button type="submit" class="btn btn-primary">Update</button>

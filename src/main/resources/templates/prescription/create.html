@@ -28,35 +28,47 @@
 <div class="container">
     <div class="card" style="max-width:550px; margin: 30px auto;">
         <h2>New Prescription</h2>
-        <form th:action="@{/prescriptions/create}" method="post">
+        <form th:action="@{/prescriptions/create}" th:object="${prescription}" method="post">
 
             <div class="form-group">
                 <label>Patient</label>
-                <select name="patientId">
+                <select th:field="*{patient.patientId}"
+                        th:classappend="${#fields.hasErrors('patient.patientId')} ? 'input-error'">
                     <option value="">-- Select Patient --</option>
                     <option th:each="p : ${patients}"
                             th:value="${p.patientId}"
                             th:text="${p.fullName + ' (' + p.mrn + ')'}">
                     </option>
                 </select>
+                <span class="error-msg" th:if="${#fields.hasErrors('patient.patientId')}"
+                      th:errors="*{patient.patientId}"></span>
             </div>
 
             <div class="form-group">
                 <label>Medication Name</label>
-                <input type="text" name="medicationName"
-                       placeholder="Enter medication name"/>
+                <input type="text" th:field="*{medicationName}"
+                       placeholder="Enter medication name"
+                       th:classappend="${#fields.hasErrors('medicationName')} ? 'input-error'"/>
+                <span class="error-msg" th:if="${#fields.hasErrors('medicationName')}"
+                      th:errors="*{medicationName}"></span>
             </div>
 
             <div class="form-group">
                 <label>Dosage</label>
-                <input type="text" name="dosage"
-                       placeholder="e.g. 500mg"/>
+                <input type="text" th:field="*{dosage}"
+                       placeholder="e.g. 500mg"
+                       th:classappend="${#fields.hasErrors('dosage')} ? 'input-error'"/>
+                <span class="error-msg" th:if="${#fields.hasErrors('dosage')}"
+                      th:errors="*{dosage}"></span>
             </div>
 
             <div class="form-group">
                 <label>Frequency</label>
-                <input type="text" name="frequency"
-                       placeholder="e.g. Twice daily"/>
+                <input type="text" th:field="*{frequency}"
+                       placeholder="e.g. Twice daily"
+                       th:classappend="${#fields.hasErrors('frequency')} ? 'input-error'"/>
+                <span class="error-msg" th:if="${#fields.hasErrors('frequency')}"
+                      th:errors="*{frequency}"></span>
             </div>
 
             <button type="submit" class="btn btn-success">Save</button>

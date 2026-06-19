@@ -1,6 +1,7 @@
 package com.genc.pccrms.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 
 @Entity
@@ -15,12 +16,17 @@ public class Invoice {
     @JoinColumn(name = "patientId", nullable = false)
     private Patient patient;
 
+    @NotNull(message = "Total amount is required")
+    @DecimalMin(value = "0.01", message = "Total amount must be greater than 0")
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal totalAmount;
 
+    @NotNull(message = "Insurance coverage is required")
+    @DecimalMin(value = "0.00", message = "Insurance coverage cannot be negative")
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal insuranceCoverage;
 
+    @DecimalMin(value = "0.00", message = "Patient payable amount cannot be negative")
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal patientPayable;
 
@@ -34,16 +40,7 @@ public class Invoice {
 
     public Invoice() {}
 
-    public Invoice(Integer invoiceId, Patient patient, BigDecimal totalAmount,
-                   BigDecimal insuranceCoverage, BigDecimal patientPayable,
-                   ClaimStatus claimStatus) {
-        this.invoiceId = invoiceId;
-        this.patient = patient;
-        this.totalAmount = totalAmount;
-        this.insuranceCoverage = insuranceCoverage;
-        this.patientPayable = patientPayable;
-        this.claimStatus = claimStatus;
-    }
+
 
     public Integer getInvoiceId() { return invoiceId; }
     public Patient getPatient() { return patient; }

@@ -1,9 +1,14 @@
 package com.genc.pccrms.service;
 
 import com.genc.pccrms.model.Patient;
+import com.genc.pccrms.repository.AppointmentRepository;
+import com.genc.pccrms.repository.ClinicalRecordRepository;
+import com.genc.pccrms.repository.InvoiceRepository;
 import com.genc.pccrms.repository.PatientRepository;
+import com.genc.pccrms.repository.PrescriptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +18,18 @@ public class PatientService {
 
     @Autowired
     private PatientRepository patientRepository;
+
+    @Autowired
+    private AppointmentRepository appointmentRepository;
+
+    @Autowired
+    private ClinicalRecordRepository clinicalRecordRepository;
+
+    @Autowired
+    private PrescriptionRepository prescriptionRepository;
+
+    @Autowired
+    private InvoiceRepository invoiceRepository;
 
     public Patient registerPatient(Patient patient) {
         String mrn = generateMRN();
@@ -42,7 +59,12 @@ public class PatientService {
         return patientRepository.searchPatients(keyword);
     }
 
+    @Transactional
     public void deletePatient(Integer patientId) {
+        appointmentRepository.deleteAll(appointmentRepository.findByPatient_PatientId(patientId));
+        prescriptionRepository.deleteAll(prescriptionRepository.findByPatient_PatientId(patientId));
+        clinicalRecordRepository.deleteAll(clinicalRecordRepository.findByPatient_PatientId(patientId));
+        invoiceRepository.deleteAll(invoiceRepository.findByPatient_PatientId(patientId));
         patientRepository.deleteById(patientId);
     }
 

@@ -33,27 +33,39 @@
 
             <div class="form-group">
                 <label>Full Name</label>
-                <input type="text" th:field="*{fullName}"/>
+                <input type="text" th:field="*{fullName}"
+                       th:classappend="${#fields.hasErrors('fullName')} ? 'input-error'"/>
+                <span class="error-msg" th:if="${#fields.hasErrors('fullName')}"
+                      th:errors="*{fullName}"></span>
             </div>
 
             <div class="form-group">
                 <label>Date of Birth</label>
-                <input type="date" th:field="*{dateOfBirth}"/>
+                <input type="date" th:field="*{dateOfBirth}"
+                       th:classappend="${#fields.hasErrors('dateOfBirth')} ? 'input-error'"/>
+                <span class="error-msg" th:if="${#fields.hasErrors('dateOfBirth')}"
+                      th:errors="*{dateOfBirth}"></span>
             </div>
 
             <div class="form-group">
                 <label>Gender</label>
-                <select th:field="*{gender}">
+                <select th:field="*{gender}"
+                        th:classappend="${#fields.hasErrors('gender')} ? 'input-error'">
                     <option value="">-- Select Gender --</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                     <option value="Other">Other</option>
                 </select>
+                <span class="error-msg" th:if="${#fields.hasErrors('gender')}"
+                      th:errors="*{gender}"></span>
             </div>
 
             <div class="form-group">
                 <label>Contact Number</label>
-                <input type="text" th:field="*{contactNumber}"/>
+                <input type="text" th:field="*{contactNumber}"
+                       th:classappend="${#fields.hasErrors('contactNumber')} ? 'input-error'"/>
+                <span class="error-msg" th:if="${#fields.hasErrors('contactNumber')}"
+                      th:errors="*{contactNumber}"></span>
             </div>
 
             <button type="submit" class="btn btn-primary">Update</button>

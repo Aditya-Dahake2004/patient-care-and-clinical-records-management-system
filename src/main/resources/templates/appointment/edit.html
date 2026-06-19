@@ -29,46 +29,57 @@
     <div class="card" style="max-width:550px; margin: 30px auto;">
         <h2>Edit Appointment</h2>
         <form th:action="@{/appointments/edit/{id}(id=${appointment.appointmentId})}"
-              method="post">
+              th:object="${appointment}" method="post">
 
             <div class="form-group">
                 <label>Patient</label>
-                <select name="patientId">
+                <select name="patientId"
+                        th:classappend="${#fields.hasErrors('patient')} ? 'input-error'">
                     <option th:each="p : ${patients}"
                             th:value="${p.patientId}"
                             th:text="${p.fullName + ' (' + p.mrn + ')'}"
                             th:selected="${p.patientId == appointment.patient.patientId}">
                     </option>
                 </select>
+                <span class="error-msg" th:if="${#fields.hasErrors('patient')}"
+                      th:errors="*{patient}"></span>
             </div>
 
             <div class="form-group">
                 <label>Doctor Name</label>
-                <input type="text" name="doctorName"
-                       th:value="${appointment.doctorName}"/>
+                <input type="text" th:field="*{doctorName}"
+                       th:classappend="${#fields.hasErrors('doctorName')} ? 'input-error'"/>
+                <span class="error-msg" th:if="${#fields.hasErrors('doctorName')}"
+                      th:errors="*{doctorName}"></span>
             </div>
 
             <div class="form-group">
                 <label>Appointment Date</label>
-                <input type="date" name="appointmentDate"
-                       th:value="${appointment.appointmentDate}"/>
+                <input type="date" th:field="*{appointmentDate}"
+                       th:classappend="${#fields.hasErrors('appointmentDate')} ? 'input-error'"/>
+                <span class="error-msg" th:if="${#fields.hasErrors('appointmentDate')}"
+                      th:errors="*{appointmentDate}"></span>
             </div>
 
             <div class="form-group">
                 <label>Appointment Time</label>
-                <input type="time" name="appointmentTime"
-                       th:value="${appointment.appointmentTime}"/>
+                <input type="time" th:field="*{appointmentTime}"
+                       th:classappend="${#fields.hasErrors('appointmentTime')} ? 'input-error'"/>
+                <span class="error-msg" th:if="${#fields.hasErrors('appointmentTime')}"
+                      th:errors="*{appointmentTime}"></span>
             </div>
 
             <div class="form-group">
                 <label>Status</label>
-                <select name="appointmentStatus">
+                <select th:field="*{appointmentStatus}"
+                        th:classappend="${#fields.hasErrors('appointmentStatus')} ? 'input-error'">
                     <option th:each="status : ${statuses}"
                             th:value="${status}"
-                            th:text="${status}"
-                            th:selected="${status == appointment.appointmentStatus}">
+                            th:text="${status}">
                     </option>
                 </select>
+                <span class="error-msg" th:if="${#fields.hasErrors('appointmentStatus')}"
+                      th:errors="*{appointmentStatus}"></span>
             </div>
 
             <button type="submit" class="btn btn-primary">Update</button>

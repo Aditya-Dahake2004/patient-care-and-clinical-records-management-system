@@ -3,9 +3,11 @@ package com.genc.pccrms.controller;
 import com.genc.pccrms.model.Prescription;
 import com.genc.pccrms.service.PatientService;
 import com.genc.pccrms.service.PrescriptionService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -35,9 +37,15 @@ public class PrescriptionController {
 
     // Submit create form
     @PostMapping("/create")
-    public String createPrescription(@ModelAttribute("prescription") Prescription prescription,
-                                     @RequestParam("patientId") Integer patientId) {
-        prescriptionService.createPrescription(patientId, prescription);
+    public String createPrescription(@Valid @ModelAttribute("prescription") Prescription prescription,
+                                     BindingResult result,
+                                     Model model) {
+        Integer resolvedPatientId = resolvePatientId(prescription, result);
+        if (result.hasErrors()) {
+            model.addAttribute("patients", patientService.getAllPatients());
+            return "prescription/create";
+        }
+        prescriptionService.createPrescription(resolvedPatientId, prescription);
         return "redirect:/prescriptions";
     }
 
@@ -55,10 +63,25 @@ public class PrescriptionController {
     // Submit edit form
     @PostMapping("/edit/{id}")
     public String updatePrescription(@PathVariable Integer id,
-                                     @ModelAttribute("prescription") Prescription prescription,
-                                     @RequestParam("patientId") Integer patientId) {
-        prescriptionService.updatePrescription(id, prescription, patientId);
+                                     @Valid @ModelAttribute("prescription") Prescription prescription,
+                                     BindingResult result,
+                                     Model model) {
+        Integer resolvedPatientId = resolvePatientId(prescription, result);
+        if (result.hasErrors()) {
+            model.addAttribute("patients", patientService.getAllPatients());
+            model.addAttribute("statuses", Prescription.DispenseStatus.values());
+            return "prescription/edit";
+        }
+        prescriptionService.updatePrescription(id, prescription, resolvedPatientId);
         return "redirect:/prescriptions";
+    }
+
+    private Integer resolvePatientId(Prescription prescription, BindingResult result) {
+        if (prescription.getPatient() == null || prescription.getPatient().getPatientId() == null) {
+            result.rejectValue("patient.patientId", "patient.required", "Patient is required");
+            return null;
+        }
+        return prescription.getPatient().getPatientId();
     }
 
     // Dispense medication

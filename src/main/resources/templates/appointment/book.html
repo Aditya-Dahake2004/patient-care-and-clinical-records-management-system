@@ -28,32 +28,44 @@
 <div class="container">
     <div class="card" style="max-width:550px; margin: 30px auto;">
         <h2>Book Appointment</h2>
-        <form th:action="@{/appointments/book}" method="post">
+        <form th:action="@{/appointments/book}" th:object="${appointment}" method="post">
 
             <div class="form-group">
                 <label>Patient</label>
-                <select name="patientId">
+                <select name="patientId"
+                        th:classappend="${#fields.hasErrors('patient')} ? 'input-error'">
                     <option value="">-- Select Patient --</option>
                     <option th:each="p : ${patients}"
                             th:value="${p.patientId}"
                             th:text="${p.fullName + ' (' + p.mrn + ')'}">
                     </option>
                 </select>
+                <span class="error-msg" th:if="${#fields.hasErrors('patient')}"
+                      th:errors="*{patient}"></span>
             </div>
 
             <div class="form-group">
                 <label>Doctor Name</label>
-                <input type="text" name="doctorName" placeholder="Enter doctor name"/>
+                <input type="text" th:field="*{doctorName}" placeholder="Enter doctor name"
+                       th:classappend="${#fields.hasErrors('doctorName')} ? 'input-error'"/>
+                <span class="error-msg" th:if="${#fields.hasErrors('doctorName')}"
+                      th:errors="*{doctorName}"></span>
             </div>
 
             <div class="form-group">
                 <label>Appointment Date</label>
-                <input type="date" name="appointmentDate"/>
+                <input type="date" th:field="*{appointmentDate}"
+                       th:classappend="${#fields.hasErrors('appointmentDate')} ? 'input-error'"/>
+                <span class="error-msg" th:if="${#fields.hasErrors('appointmentDate')}"
+                      th:errors="*{appointmentDate}"></span>
             </div>
 
             <div class="form-group">
                 <label>Appointment Time</label>
-                <input type="time" name="appointmentTime"/>
+                <input type="time" th:field="*{appointmentTime}"
+                       th:classappend="${#fields.hasErrors('appointmentTime')} ? 'input-error'"/>
+                <span class="error-msg" th:if="${#fields.hasErrors('appointmentTime')}"
+                      th:errors="*{appointmentTime}"></span>
             </div>
 
             <button type="submit" class="btn btn-success">Book</button>

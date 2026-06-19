@@ -28,41 +28,57 @@
 <div class="container">
     <div class="card" style="max-width:550px; margin: 30px auto;">
         <h2>Add Clinical Record</h2>
-        <form th:action="@{/ehr/create}" method="post">
+        <form th:action="@{/ehr/create}" th:object="${record}" method="post">
 
             <div class="form-group">
                 <label>Patient</label>
-                <select name="patientId">
+                <select th:field="*{patient.patientId}"
+                        th:classappend="${#fields.hasErrors('patient.patientId')} ? 'input-error'">
                     <option value="">-- Select Patient --</option>
                     <option th:each="p : ${patients}"
                             th:value="${p.patientId}"
                             th:text="${p.fullName + ' (' + p.mrn + ')'}">
                     </option>
                 </select>
+                <span class="error-msg" th:if="${#fields.hasErrors('patient.patientId')}"
+                      th:errors="*{patient.patientId}"></span>
             </div>
 
             <div class="form-group">
                 <label>Encounter Date</label>
-                <input type="date" name="encounterDate"/>
+                <input type="date" th:field="*{encounterDate}"
+                       th:classappend="${#fields.hasErrors('encounterDate')} ? 'input-error'"/>
+                <span class="error-msg" th:if="${#fields.hasErrors('encounterDate')}"
+                      th:errors="*{encounterDate}"></span>
             </div>
 
             <div class="form-group">
                 <label>Diagnosis Code</label>
-                <input type="text" name="diagnosisCode" placeholder="e.g. ICD-10: J06.9"/>
+                <input type="text" th:field="*{diagnosisCode}"
+                       placeholder="e.g. ICD-10: J06.9"
+                       th:classappend="${#fields.hasErrors('diagnosisCode')} ? 'input-error'"/>
+                <span class="error-msg" th:if="${#fields.hasErrors('diagnosisCode')}"
+                      th:errors="*{diagnosisCode}"></span>
             </div>
 
             <div class="form-group">
                 <label>Vitals Summary</label>
-                <input type="text" name="vitalsSummary"
-                       placeholder="e.g. BP: 120/80, Temp: 98.6F"/>
+                <input type="text" th:field="*{vitalsSummary}"
+                       placeholder="e.g. BP: 120/80, Temp: 98.6F"
+                       th:classappend="${#fields.hasErrors('vitalsSummary')} ? 'input-error'"/>
+                <span class="error-msg" th:if="${#fields.hasErrors('vitalsSummary')}"
+                      th:errors="*{vitalsSummary}"></span>
             </div>
 
             <div class="form-group">
                 <label>Clinical Notes</label>
-                <textarea name="clinicalNotes" rows="4"
+                <textarea th:field="*{clinicalNotes}" rows="4"
                           style="width:100%; padding:10px; border:1px solid #ccc;
                                  border-radius:4px; font-size:14px;"
+                          th:classappend="${#fields.hasErrors('clinicalNotes')} ? 'input-error'"
                           placeholder="Enter clinical notes here..."></textarea>
+                <span class="error-msg" th:if="${#fields.hasErrors('clinicalNotes')}"
+                      th:errors="*{clinicalNotes}"></span>
             </div>
 
             <button type="submit" class="btn btn-success">Save Record</button>

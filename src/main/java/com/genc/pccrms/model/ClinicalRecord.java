@@ -1,7 +1,9 @@
 package com.genc.pccrms.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import java.time.LocalDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "ClinicalRecord")
@@ -15,15 +17,23 @@ public class ClinicalRecord {
     @JoinColumn(name = "patientId", nullable = false)
     private Patient patient;
 
+    @NotNull(message = "Encounter date is required")
+    @PastOrPresent(message = "Encounter date cannot be in the future")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(nullable = false)
     private LocalDate encounterDate;
 
+    @NotBlank(message = "Diagnosis code is required")
+    @Pattern(regexp = "^[A-Z0-9]{2,20}$", message = "Diagnosis code must be alphanumeric (2-20 characters)")
     @Column(nullable = false, length = 20)
     private String diagnosisCode;
 
+    @NotBlank(message = "Clinical notes are required")
+    @Size(min = 5, max = 2000, message = "Clinical notes must be between 5 and 2000 characters")
     @Column(columnDefinition = "TEXT")
     private String clinicalNotes;
 
+    @Size(max = 255, message = "Vitals summary must not exceed 255 characters")
     @Column(length = 255)
     private String vitalsSummary;
 

@@ -2,9 +2,11 @@ package com.genc.pccrms.controller;
 
 import com.genc.pccrms.model.Patient;
 import com.genc.pccrms.service.PatientService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,12 +34,16 @@ public class PatientController {
     }
 
     @PostMapping("/register")
-    public String registerPatient(@ModelAttribute("patient") Patient patient) {
+    public String registerPatient(@Valid @ModelAttribute("patient") Patient patient,
+                                  BindingResult result) {
+        if (result.hasErrors()) {
+            return "patient/register";
+        }
         patientService.registerPatient(patient);
         return "redirect:/patients";
     }
 
-        @GetMapping("/edit/{id}")
+    @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Integer id, Model model) {
         Patient patient = patientService.getPatientById(id)
                 .orElseThrow(() -> new RuntimeException("Patient not found"));
@@ -48,7 +54,11 @@ public class PatientController {
 
     @PostMapping("/edit/{id}")
     public String updatePatient(@PathVariable Integer id,
-                                @ModelAttribute("patient") Patient patient) {
+                                @Valid @ModelAttribute("patient") Patient patient,
+                                BindingResult result) {
+        if (result.hasErrors()) {
+            return "patient/edit";
+        }
         patientService.updatePatient(id, patient);
         return "redirect:/patients";
     }

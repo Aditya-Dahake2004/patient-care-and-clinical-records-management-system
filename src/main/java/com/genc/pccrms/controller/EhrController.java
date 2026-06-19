@@ -3,9 +3,11 @@ package com.genc.pccrms.controller;
 import com.genc.pccrms.model.ClinicalRecord;
 import com.genc.pccrms.service.ClinicalRecordService;
 import com.genc.pccrms.service.PatientService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,9 +36,15 @@ public class EhrController {
     }
 
     @PostMapping("/create")
-    public String createRecord(@ModelAttribute("record") ClinicalRecord record,
-                               @RequestParam("patientId") Integer patientId) {
-        clinicalRecordService.createRecord(patientId, record);
+    public String createRecord(@Valid @ModelAttribute("record") ClinicalRecord record,
+                               BindingResult result,
+                               Model model) {
+        Integer resolvedPatientId = resolvePatientId(record, result);
+        if (result.hasErrors()) {
+            model.addAttribute("patients", patientService.getAllPatients());
+            return "ehr/create";
+        }
+        clinicalRecordService.createRecord(resolvedPatientId, record);
         return "redirect:/ehr";
     }
 
@@ -51,10 +59,24 @@ public class EhrController {
 
     @PostMapping("/edit/{id}")
     public String updateRecord(@PathVariable Integer id,
-                               @ModelAttribute("record") ClinicalRecord record,
-                               @RequestParam("patientId") Integer patientId) {
-        clinicalRecordService.updateRecord(id, record, patientId);
+                               @Valid @ModelAttribute("record") ClinicalRecord record,
+                               BindingResult result,
+                               Model model) {
+        Integer resolvedPatientId = resolvePatientId(record, result);
+        if (result.hasErrors()) {
+            model.addAttribute("patients", patientService.getAllPatients());
+            return "ehr/edit";
+        }
+        clinicalRecordService.updateRecord(id, record, resolvedPatientId);
         return "redirect:/ehr";
+    }
+
+    private Integer resolvePatientId(ClinicalRecord record, BindingResult result) {
+        if (record.getPatient() == null || record.getPatient().getPatientId() == null) {
+            result.rejectValue("patient.patientId", "patient.required", "Patient is required");
+            return null;
+        }
+        return record.getPatient().getPatientId();
     }
 
     @GetMapping("/delete/{id}")
@@ -62,6 +84,7 @@ public class EhrController {
         clinicalRecordService.deleteRecord(id);
         return "redirect:/ehr";
     }
+    
     @GetMapping("/view/{id}")
     public String viewRecord(@PathVariable Integer id, Model model) {
         ClinicalRecord record = clinicalRecordService.getRecordById(id)

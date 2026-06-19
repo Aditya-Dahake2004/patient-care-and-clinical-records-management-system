@@ -3,6 +3,7 @@ package com.genc.pccrms.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.time.LocalDate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "Patient")
@@ -20,6 +21,7 @@ public class Patient {
     private String fullName;
 
     @NotNull(message = "Date of birth is required")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(nullable = false)
     private LocalDate dateOfBirth;
 
