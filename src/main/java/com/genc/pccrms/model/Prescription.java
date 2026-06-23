@@ -38,7 +38,7 @@ public class Prescription {
         PENDING, DISPENSED, CANCELLED
     }
 
-    // ===== Constructors =====
+    //Constructors
     public Prescription() {}
 
     public Prescription(Integer prescriptionId, Patient patient, String medicationName,
@@ -51,7 +51,7 @@ public class Prescription {
         this.dispenseStatus = dispenseStatus;
     }
 
-    // ===== Getters =====
+    //Getters
     public Integer getPrescriptionId() { return prescriptionId; }
     public Patient getPatient() { return patient; }
     public String getMedicationName() { return medicationName; }
@@ -59,7 +59,7 @@ public class Prescription {
     public String getFrequency() { return frequency; }
     public DispenseStatus getDispenseStatus() { return dispenseStatus; }
 
-    // ===== Setters =====
+    //Setters
     public void setPrescriptionId(Integer prescriptionId) { this.prescriptionId = prescriptionId; }
     public void setPatient(Patient patient) { this.patient = patient; }
     public void setMedicationName(String medicationName) { this.medicationName = medicationName; }
