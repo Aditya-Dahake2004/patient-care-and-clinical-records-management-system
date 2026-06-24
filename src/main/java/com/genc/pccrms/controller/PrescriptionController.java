@@ -75,7 +75,7 @@ public class PrescriptionController {
         prescriptionService.updatePrescription(id, prescription, resolvedPatientId);
         return "redirect:/prescriptions";
     }
-
+//custom validation method
     private Integer resolvePatientId(Prescription prescription, BindingResult result) {
         if (prescription.getPatient() == null || prescription.getPatient().getPatientId() == null) {
             result.rejectValue("patient.patientId", "patient.required", "Patient is required");
