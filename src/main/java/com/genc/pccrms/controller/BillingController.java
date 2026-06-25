@@ -75,7 +75,6 @@ public class BillingController {
         return "redirect:/billing";
     }
 
-    // View invoice
     @GetMapping("/view/{id}")
     public String viewInvoice(@PathVariable Integer id, Model model) {
         Invoice invoice = billingService.getInvoiceById(id)
