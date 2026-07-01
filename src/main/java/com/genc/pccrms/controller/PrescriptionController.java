@@ -25,7 +25,7 @@ public class PrescriptionController {
         return "prescription/list";
     }
 
-    // Show create form
+
     @GetMapping("/create")
     public String showCreateForm(Model model) {
         model.addAttribute("prescription", new Prescription());

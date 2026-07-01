@@ -20,14 +20,12 @@ public class AppointmentController {
     @Autowired
     private PatientService patientService;
 
-    // List all appointments
     @GetMapping
     public String listAppointments(Model model) {
         model.addAttribute("appointments", appointmentService.getAllAppointments());
         return "appointment/list";
     }
 
-    // Show book form
     @GetMapping("/book")
     public String showBookForm(Model model) {
         model.addAttribute("appointment", new Appointment());
@@ -35,7 +33,7 @@ public class AppointmentController {
         return "appointment/book";
     }
 
-    // Submit book form
+
     @PostMapping("/book")
     public String bookAppointment(@ModelAttribute("appointment") Appointment appointment,
                                   @RequestParam("patientId") Integer patientId) {
