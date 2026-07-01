@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Clinical Record</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <span class="brand">PCCRMS</span>
+    <div style="display:flex; align-items:center; gap:20px;">
+        <a th:href="@{/}">Home</a>
+        <a th:href="@{/patients}">Patients</a>
+        <a th:href="@{/appointments}">Appointments</a>
+        <a th:href="@{/ehr}">EHR</a>
+        <a th:href="@{/prescriptions}">Prescriptions</a>
+        <a th:href="@{/billing}">Billing</a>
+
+        <div class="admin-badge">
+            <i class="fa-solid fa-user-shield"></i>
+            <span>Admin</span>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="card" style="max-width:550px; margin: 30px auto;">
+        <h2>Add Clinical Record</h2>
+        <form th:action="@{/ehr/create}" method="post">
+
+            <div class="form-group">
+                <label>Patient</label>
+                <select name="patientId">
+                    <option value="">-- Select Patient --</option>
+                    <option th:each="p : ${patients}"
+                            th:value="${p.patientId}"
+                            th:text="${p.fullName + ' (' + p.mrn + ')'}">
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Encounter Date</label>
+                <input type="date" name="encounterDate"/>
+            </div>
+
+            <div class="form-group">
+                <label>Diagnosis Code</label>
+                <input type="text" name="diagnosisCode" placeholder="e.g. ICD-10: J06.9"/>
+            </div>
+
+            <div class="form-group">
+                <label>Vitals Summary</label>
+                <input type="text" name="vitalsSummary"
+                       placeholder="e.g. BP: 120/80, Temp: 98.6F"/>
+            </div>
+
+            <div class="form-group">
+                <label>Clinical Notes</label>
+                <textarea name="clinicalNotes" rows="4"
+                          style="width:100%; padding:10px; border:1px solid #ccc;
+                                 border-radius:4px; font-size:14px;"
+                          placeholder="Enter clinical notes here..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-success">Save Record</button>
+            <a th:href="@{/ehr}" class="btn btn-danger" style="margin-left:10px;">Cancel</a>
+
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
